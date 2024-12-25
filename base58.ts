@@ -7,17 +7,17 @@ function convert({ inputBase, outputBase, input }: {
   input: Iterable<number>;
 }) {
   const output = new Array<number>();
-  let leadingZeros = 0;
-  let stillZero = true;
+  let zeroCounter = 0;
+  let encodingFlag = false;
   for (const digit of input) {
-    if (stillZero) {
+    if (!encodingFlag) {
       if (digit === 0) {
-        leadingZeros++;
+        zeroCounter++;
       } else {
-        stillZero = false;
+        encodingFlag = true;
       }
     }
-    if (!stillZero) {
+    if (encodingFlag) {
       let index = 0;
       let carry = digit;
       while (carry > 0 || index < output.length) {
@@ -29,7 +29,7 @@ function convert({ inputBase, outputBase, input }: {
       }
     }
   }
-  for (let i = 0; i < leadingZeros; i++) {
+  for (let i = 0; i < zeroCounter; i++) {
     output.push(0);
   }
   return output.reverse();
@@ -44,26 +44,25 @@ function getAlphabet(alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmno
  * Encodes a Uint8Array buffer into a base58 string.
  *
  * @param buffer The buffer to encode.
- * @param options Optionally specify the alphabet to use.
+ * @param options Optionally specify the alphabet to use. The alphabet must be a 58-character string.
  * @returns The base58 encoded string.
  */
-export function encode(buffer: Uint8Array, options?: { alphabet: string }): string {
+export function encode(buffer: Uint8Array, options?: { alphabet?: string }): string {
   const alphabet = getAlphabet(options?.alphabet);
-  const map = new Map(Array.from(alphabet).map((character, index) => [index, character]));
-  const digits = convert({ input: buffer, inputBase: 256, outputBase: 58 });
-  return digits.map((digit) => require(map.get(digit))).join('');
+  const output = convert({ input: buffer, inputBase: 256, outputBase: 58 });
+  return output.map((digit) => require(alphabet[digit])).join('');
 }
 
 /**
  * Decodes a base58 encoded string into a Uint8Array buffer.
  *
  * @param string The base58 encoded string.
- * @param options Optionally specify the alphabet to use.
+ * @param options Optionally specify the alphabet to use. The alphabet must be a 58-character string.
  * @returns The decoded buffer.
  */
-export function decode(string: string, options?: { alphabet: string }): Uint8Array {
+export function decode(string: string, options?: { alphabet?: string }): Uint8Array {
   const alphabet = getAlphabet(options?.alphabet);
   const map = new Map(Array.from(alphabet).map((character, index) => [character, index]));
-  const digits = Array.from(string).map((character) => require(map.get(character)));
-  return new Uint8Array(convert({ input: digits, inputBase: 58, outputBase: 256 }));
+  const input = Array.from(string).map((character) => require(map.get(character), `Invalid character ${character}`));
+  return new Uint8Array(convert({ input, inputBase: 58, outputBase: 256 }));
 }
