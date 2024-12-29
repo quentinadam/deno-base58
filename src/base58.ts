@@ -21,7 +21,7 @@ function convert({ inputBase, outputBase, input }: {
       let index = 0;
       let carry = digit;
       while (carry > 0 || index < output.length) {
-        carry += output[index] !== undefined ? output[index] * inputBase : 0;
+        carry += (output[index] ?? 0) * inputBase;
         const remainder = carry % outputBase;
         carry = (carry - remainder) / outputBase;
         output[index] = remainder;
