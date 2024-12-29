@@ -1,7 +1,7 @@
-import * as base58 from '../src/base58.ts';
 import assert from '@quentinadam/assert';
 import * as hex from '@quentinadam/hex';
-import Uit8ArrayExtension from '@quentinadam/uint8array-extension';
+import * as Uit8ArrayExtension from '@quentinadam/uint8array-extension';
+import * as base58 from '../src/base58.ts';
 
 const vectors = [
   { decoded: 'Hello', encoded: '9Ajdvzr' },
@@ -54,7 +54,7 @@ Deno.test('decode', () => {
     } else {
       const result = base58.decode(encoded);
       assert(
-        new Uit8ArrayExtension(result).equals(decoded),
+        Uit8ArrayExtension.equals(result, decoded),
         `Expected [${hex.encode(decoded)}] but got [${hex.encode(result)}]`,
       );
     }
