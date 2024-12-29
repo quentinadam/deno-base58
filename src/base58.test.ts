@@ -1,4 +1,4 @@
-import * as base58 from './base58.ts';
+import * as base58 from '../src/base58.ts';
 import assert from '@quentinadam/assert';
 import * as hex from '@quentinadam/hex';
 import Uit8ArrayExtension from '@quentinadam/uint8array-extension';
