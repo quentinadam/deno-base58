@@ -1,6 +1,6 @@
 {
   "name": "@quentinadam/base58",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A simple library to encode and decode base58 strings",
   "license": "MIT",
   "exports": "./src/base58.ts",
