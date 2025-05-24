@@ -1,5 +1,5 @@
 import assert from '@quentinadam/assert';
-import require from '@quentinadam/require';
+import ensure from '@quentinadam/ensure';
 
 function convert({ inputBase, outputBase, input }: {
   inputBase: number;
@@ -62,7 +62,7 @@ export interface Options {
 export function encode(buffer: Uint8Array, options?: Options): string {
   const alphabet = getAlphabet(options?.alphabet);
   const output = convert({ input: buffer, inputBase: 256, outputBase: 58 });
-  return output.map((digit) => require(alphabet[digit])).join('');
+  return output.map((digit) => ensure(alphabet[digit])).join('');
 }
 
 /**
@@ -75,6 +75,6 @@ export function encode(buffer: Uint8Array, options?: Options): string {
 export function decode(string: string, options?: Options): Uint8Array {
   const alphabet = getAlphabet(options?.alphabet);
   const map = new Map(Array.from(alphabet).map((character, index) => [character, index]));
-  const input = Array.from(string).map((character) => require(map.get(character), `Invalid character ${character}`));
+  const input = Array.from(string).map((character) => ensure(map.get(character), `Invalid character ${character}`));
   return new Uint8Array(convert({ input, inputBase: 58, outputBase: 256 }));
 }
