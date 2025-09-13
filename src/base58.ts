@@ -59,20 +59,20 @@ export interface Options {
  * @param options The options to use for encoding.
  * @returns The base58 encoded string.
  */
-export function encode(buffer: Uint8Array, options?: Options): string {
+export function encode(buffer: Uint8Array<ArrayBuffer>, options?: Options): string {
   const alphabet = getAlphabet(options?.alphabet);
   const output = convert({ input: buffer, inputBase: 256, outputBase: 58 });
   return output.map((digit) => ensure(alphabet[digit])).join('');
 }
 
 /**
- * Decodes a base58 encoded string into a Uint8Array buffer.
+ * Decodes a base58 encoded string into a Uint8Array<ArrayBuffer> buffer.
  *
  * @param string The base58 encoded string.
  * @param options The options to use for decoding.
  * @returns The decoded buffer.
  */
-export function decode(string: string, options?: Options): Uint8Array {
+export function decode(string: string, options?: Options): Uint8Array<ArrayBuffer> {
   const alphabet = getAlphabet(options?.alphabet);
   const map = new Map(Array.from(alphabet).map((character, index) => [character, index]));
   const input = Array.from(string).map((character) => ensure(map.get(character), `Invalid character ${character}`));
