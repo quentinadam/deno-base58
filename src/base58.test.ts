@@ -1,6 +1,4 @@
 import assert from '@quentinadam/assert';
-import * as hex from '@quentinadam/hex';
-import * as Uit8ArrayExtension from '@quentinadam/uint8array-extension';
 import * as base58 from '../src/base58.ts';
 
 const vectors = [
@@ -10,25 +8,27 @@ const vectors = [
     decoded: 'The quick brown fox jumps over the lazy dog.',
     encoded: 'USm3fpXnKG5EUBx2ndxBDMPVciP5hGey2Jh4NDv6gmeo1LkMeiKrLJUUBk6Z',
   },
-  { decoded: hex.decode('61'), encoded: '2g' },
-  { decoded: hex.decode('626262'), encoded: 'a3gV' },
-  { decoded: hex.decode('636363'), encoded: 'aPEr' },
+  { decoded: Uint8Array.fromHex('61'), encoded: '2g' },
+  { decoded: Uint8Array.fromHex('626262'), encoded: 'a3gV' },
+  { decoded: Uint8Array.fromHex('636363'), encoded: 'aPEr' },
   {
-    decoded: hex.decode('73696d706c792061206c6f6e6720737472696e67'),
+    decoded: Uint8Array.fromHex('73696d706c792061206c6f6e6720737472696e67'),
     encoded: '2cFupjhnEsSn59qHXstmK2ffpLv2',
   },
   {
-    decoded: hex.decode('00eb15231dfceb60925886b67d065299925915aeb172c06647'),
+    decoded: Uint8Array.fromHex('00eb15231dfceb60925886b67d065299925915aeb172c06647'),
     encoded: '1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L',
   },
-  { decoded: hex.decode('516b6fcd0f'), encoded: 'ABnLTmg' },
-  { decoded: hex.decode('bf4f89001e670274dd'), encoded: '3SEo3LWLoPntC' },
-  { decoded: hex.decode('572e4794'), encoded: '3EFU7m' },
-  { decoded: hex.decode('ecac89cad93923c02321'), encoded: 'EJDM8drfXA6uyA' },
-  { decoded: hex.decode('10c8511e'), encoded: 'Rt5zm' },
+  { decoded: Uint8Array.fromHex('516b6fcd0f'), encoded: 'ABnLTmg' },
+  { decoded: Uint8Array.fromHex('bf4f89001e670274dd'), encoded: '3SEo3LWLoPntC' },
+  { decoded: Uint8Array.fromHex('572e4794'), encoded: '3EFU7m' },
+  { decoded: Uint8Array.fromHex('ecac89cad93923c02321'), encoded: 'EJDM8drfXA6uyA' },
+  { decoded: Uint8Array.fromHex('10c8511e'), encoded: 'Rt5zm' },
   { decoded: new Uint8Array(10), encoded: '1111111111' },
   {
-    decoded: hex.decode('000111d38e5fc9071ffcd20b4a763cc9ae4f252bb4e48fd66a835e252ada93ff480d6dd43dc62a641155a5'),
+    decoded: Uint8Array.fromHex(
+      '000111d38e5fc9071ffcd20b4a763cc9ae4f252bb4e48fd66a835e252ada93ff480d6dd43dc62a641155a5',
+    ),
     encoded: '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
   },
   {
@@ -54,8 +54,8 @@ Deno.test('decode', () => {
     } else {
       const result = base58.decode(encoded);
       assert(
-        Uit8ArrayExtension.equals(result, decoded),
-        `Expected [${hex.encode(decoded)}] but got [${hex.encode(result)}]`,
+        result.toHex() === decoded.toHex(),
+        `Expected [${decoded.toHex()}] but got [${result.toHex()}]`,
       );
     }
   }
