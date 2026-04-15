@@ -1,5 +1,5 @@
-import assert from '@quentinadam/assert';
-import ensure from '@quentinadam/ensure';
+import { assert } from '@quentinadam/assert';
+import { ensure } from '@quentinadam/ensure';
 
 function convert({ inputBase, outputBase, input }: {
   inputBase: number;
